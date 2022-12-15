@@ -1,7 +1,7 @@
 from base.models import Room
-from django.rest_framework import ModelSerializers
+from rest_framework import serializers
 
-class RoomSerializers():
+class RoomSerializers(serializers.ModelSerializer):
     class Meta:
-        model: Room
-        fields : "__all__"
+        model = Room
+        fields = '__all__'
