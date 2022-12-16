@@ -1,13 +1,13 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .models import Room,Topic, Message
-from .forms import RoomForm, UserForm
+from .models import Room,Topic, Message, User
+from .forms import RoomForm, UserForm, MyUserCreationForm as UserCreationForm
 from django.db.models import Q
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required #to restrict pages from no users
-from django.contrib.auth.forms import UserCreationForm # to get the form to crate a new user
+# from django.contrib.auth.forms import UserCreationForm # to get the form to crate a new user
 
 # Create your views here.
 
@@ -74,11 +74,11 @@ def userProfile(request,pk):
 
 @login_required(login_url='login')
 def updateUser(request, pk):
-    user = request.user
+    user = User.objects.get(id=pk)
     form = UserForm(instance=user)
     context = {'user': user,'form':form}
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES ,instance=user,)
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk = user.id)
